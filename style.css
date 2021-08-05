@@ -1,0 +1,17 @@
+.board-container{
+    height:50vh;
+    width:50vh;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows:repeat(3,1fr); 
+    grid-gap:5px;
+}
+.square{
+    border:1px solid black;
+}
+.x{
+    background-color:blue;
+}
+.o{
+    background-color:red;
+}

@@ -8,6 +8,8 @@ const gameBoard = (() => {
     //select the gameboard
     const boardContainer = document.querySelector(".board-container");
 
+    const resetButton = document.querySelector(".reset-button");
+
     //make each square for the gameboard
     gameBoardArr.forEach(() => {
         const square = document.createElement("div");
@@ -26,13 +28,31 @@ const gameBoard = (() => {
             displayController.checkWinner();
             if(displayController.winnerDeclared == false){
                 if(displayController.remainingSpots > 0){
+                    displayController.printPlayer();
                     displayController.nextTurn();
+                    
                 }
             }
-            
-            
-            
+            else{
+                Array.from(boardContainer.children).forEach((item)=>{
+                    item.style.pointerEvents = "none";
+                });
+                displayController.win();
+                
+            }
+        
+                 
         });
+    });
+    resetButton.addEventListener('click',()=>{
+        displayController.reset();
+        console.log(displayController.winnerDeclared);
+        Array.from(boardContainer.children).forEach((item,index)=>{
+            item.style.pointerEvents = "auto";
+            item.classList.remove("x");
+            item.classList.remove("o");
+            gameBoardArr[index] = "";
+        });   
     });
 
     return{gameBoardArr};
@@ -48,6 +68,9 @@ const displayController = (() =>{
     let winnerDeclared = false;
     let remainingSpots = 9;
 
+    const playerText = document.querySelector(".player-name");
+    const otherText = document.querySelector(".other-text");
+    
     
 
     const winningConditions = [
@@ -64,8 +87,8 @@ const displayController = (() =>{
     const checkWinner = () =>{
         winningConditions.forEach((item) =>{
             if(gameBoard.gameBoardArr[item[0]] === displayController.activePlayer.marker && gameBoard.gameBoardArr[item[1]] === displayController.activePlayer.marker && gameBoard.gameBoardArr[item[2]] === displayController.activePlayer.marker){
-                winnerDeclared = true;
-                console.log(winnerDeclared);
+                displayController.winnerDeclared = true;
+                console.log(displayController.winnerDeclared);
                 
             };
         });
@@ -74,15 +97,34 @@ const displayController = (() =>{
     const nextTurn = () =>{ 
         displayController.activePlayer === player1 ? displayController.activePlayer = player2 : displayController.activePlayer = player1;
         console.log('nextPlayer function ran');
-        console.log(activePlayer);
+        console.log(displayController.activePlayer);
     };
 
+    const printPlayer = () =>{
+        displayController.activePlayer === player1 ? playerText.textContent = "Player 2" : playerText.textContent = "Player 1";
+    };
+
+    const win = () =>{
+        displayController.activePlayer === player1 ? playerText.textContent = "Player 1" : playerText.textContent = "Player 2";
+        otherText.textContent = " has won!";
+        console.log("win function ran");
+    }
+    
+    const reset = () =>{
+        displayController.winnerDeclared = false;
+        displayController.remainingSpots = 9;
+        displayController.activePlayer = player1;
+        playerText.textContent = "Player 1";
+        otherText.textContent = ", make your move";
+        console.log("reset function ran");
+    }
 
 
 
 
 
-    return{activePlayer,nextTurn,checkWinner,winnerDeclared,remainingSpots};
+
+    return{activePlayer,nextTurn,checkWinner,winnerDeclared,remainingSpots,printPlayer,win,reset};
 
 })();
 

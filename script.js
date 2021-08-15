@@ -36,6 +36,8 @@ const gameBoard = (() => {
             else{
                 Array.from(boardContainer.children).forEach((item)=>{
                     item.style.pointerEvents = "none";
+                    item.classList.add("end");
+
                 });
                 displayController.win();
                 
@@ -51,6 +53,7 @@ const gameBoard = (() => {
             item.style.pointerEvents = "auto";
             item.classList.remove("x");
             item.classList.remove("o");
+            item.classList.remove("end");
             gameBoardArr[index] = "";
         });   
     });
@@ -66,7 +69,12 @@ const displayController = (() =>{
     let activePlayer = player1;
     //setup winningPlayer
     let winnerDeclared = false;
+    let winner = activePlayer;
     let remainingSpots = 9;
+
+    let win1 = 0;
+    let win2 = 0;
+    let win3 = 0;
 
     const playerText = document.querySelector(".player-name");
     const otherText = document.querySelector(".other-text");
@@ -89,7 +97,6 @@ const displayController = (() =>{
             if(gameBoard.gameBoardArr[item[0]] === displayController.activePlayer.marker && gameBoard.gameBoardArr[item[1]] === displayController.activePlayer.marker && gameBoard.gameBoardArr[item[2]] === displayController.activePlayer.marker){
                 displayController.winnerDeclared = true;
                 console.log(displayController.winnerDeclared);
-                
             };
         });
     };
